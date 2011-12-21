@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'ArgsParser'
+require 'rb-skypemac'
+
+parser = ArgsParser.parser
+parser.comment(:list, 'chat list')
+parser.comment(:port, 'http port', 8787)
+parser.comment(:chat, 'chat id')
+parser.bind(:help, :h, 'show help')
+
+first, params = parser.parse ARGV
+
+if parser.has_option(:help)
+  puts parser.help
+  exit
+end
+
+def skype(command)
+  SkypeMac::Skype.send_(:command => command)
+end
+
+if parser.has_option(:list)
+  skype('SEARCH RECENTCHATS').split(/,* /).each do |c|
+    puts c
+  end
+else
+  puts parser.help
+end
+
+
+
