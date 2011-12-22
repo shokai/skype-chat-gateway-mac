@@ -1,0 +1,16 @@
+- content_for :title do
+  = @title
+
+- content_for :head do
+  :javascript
+    var app_root = "#{app_root}";
+    var chat_interval = #{@@conf['chat_interval']}
+  %script{:type => 'text/javascript', :src => "#{app_root}/js/jquery.cookie.js"}
+  %script{:type => 'text/javascript', :src => "#{app_root}/js/main.js"}
+
+%div#chat
+  %div#ctrls
+    %input{:type => :text, :value => 'おなまえ', :id => 'name'}
+    %input{:type => :text, :value => '', :id => 'body', :size => 60}
+    %input{:type => :button, :value => '送信', :id => 'btn_send'}
+  %ul#timeline
