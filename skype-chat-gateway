@@ -2,6 +2,8 @@
 require 'rubygems'
 require 'ArgsParser'
 require 'rb-skypemac'
+require 'eventmachine'
+require 'evma_httpserver'
 
 parser = ArgsParser.parser
 parser.comment(:list, 'chat list')
@@ -16,13 +18,42 @@ if parser.has_option(:help)
   exit
 end
 
+@@chat_id = params[:chat]
+puts "chat : #{@@chat_id}"
+
 def skype(command)
   SkypeMac::Skype.send_(:command => command)
 end
 
+class SkypeHttpServer  < EM::Connection
+  include EM::HttpServer
+  
+  def process_http_request
+    res = EM::DelegatedHttpResponse.new(self)
+    puts "* http #{@http_request_method} #{@http_path_info} #{@http_query_string} #{@http_post_content}"
+    if @http_request_method == 'POST'
+      puts cmd = "CHATMESSAGE #{@@chat_id} #{@http_post_content}"
+      res.content = skype cmd
+      res.status = 200
+      res.send_response
+    elsif @http_request_method == 'GET'
+      res.status = 200
+      res.content = ''
+      res.send_response
+    end
+
+  end
+end
+
+
 if parser.has_option(:list)
   skype('SEARCH RECENTCHATS').split(/,* /).each do |c|
     puts c
+  end
+elsif parser.has_param(:chat)
+  EM::run do
+    EM::start_server('0.0.0.0', params[:port].to_i, SkypeHttpServer)
+    puts "start HTTP server - port #{params[:port].to_i}"
   end
 else
   puts parser.help
