@@ -5,22 +5,6 @@ require 'rb-skypemac'
 require 'eventmachine'
 require 'evma_httpserver'
 
-parser = ArgsParser.parser
-parser.comment(:list, 'chat list')
-parser.comment(:port, 'http port', 8787)
-parser.comment(:chat, 'chat id')
-parser.bind(:help, :h, 'show help')
-
-first, params = parser.parse ARGV
-
-if parser.has_option(:help)
-  puts parser.help
-  exit
-end
-
-@@chat_id = params[:chat]
-puts "chat : #{@@chat_id}"
-
 def skype(command)
   SkypeMac::Skype.send_(:command => command)
 end
@@ -45,18 +29,35 @@ class SkypeHttpServer  < EM::Connection
   end
 end
 
+parser = ArgsParser.parser
+parser.comment(:port, 'http port', 8787)
+parser.comment(:chat, 'chat id')
+parser.bind(:help, :h, 'show help')
 
-if parser.has_option(:list)
+first, params = parser.parse ARGV
+
+if parser.has_option(:help)
+  puts parser.help
+  puts "#{$0} -> get chat list"
+  puts "#{$0} -chat -> "
+  exit
+end
+
+if !parser.has_param(:chat)
   skype('SEARCH RECENTCHATS').split(/,* /).each do |c|
     puts c
   end
-elsif parser.has_param(:chat)
-  EM::run do
-    EM::start_server('0.0.0.0', params[:port].to_i, SkypeHttpServer)
-    puts "start HTTP server - port #{params[:port].to_i}"
-  end
-else
-  puts parser.help
+  exit
+end
+
+@@chat_id = params[:chat]
+puts "chat : #{@@chat_id}"
+
+
+
+EM::run do
+  EM::start_server('0.0.0.0', params[:port].to_i, SkypeHttpServer)
+  puts "start HTTP server - port #{params[:port].to_i}"
 end
 
 
