@@ -1,6 +1,6 @@
 
-before '*.json' do
-  content_type = 'application/json'
+before '/*.json' do
+  content_type 'application/json'
 end
 
 before '/*' do
