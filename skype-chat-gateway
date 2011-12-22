@@ -32,7 +32,7 @@ class SkypeHttpServer  < EM::Connection
         {
           :id => id,
           :user => skype("get chatmessage #{id} from_handle").split(/ /).last,
-          :body => skype("get chatmessage #{id} body").split(/ /).last,
+          :body => skype("get chatmessage #{id} body").gsub(/^MESSAGE \d+ BODY /i,''),
           :time => skype("get chatmessage #{id} timestamp").split(/ /).last.to_i
         }
       }
