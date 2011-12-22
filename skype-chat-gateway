@@ -4,6 +4,7 @@ require 'ArgsParser'
 require 'rb-skypemac'
 require 'eventmachine'
 require 'evma_httpserver'
+require 'json'
 
 def skype(command)
   SkypeMac::Skype.send_(:command => command)
@@ -16,16 +17,29 @@ class SkypeHttpServer  < EM::Connection
     res = EM::DelegatedHttpResponse.new(self)
     puts "* http #{@http_request_method} #{@http_path_info} #{@http_query_string} #{@http_post_content}"
     if @http_request_method == 'POST'
-      puts cmd = "CHATMESSAGE #{@@chat_id} #{@http_post_content}"
+      puts cmd = "chatmessage #{@@chat_id} #{@http_post_content}"
       res.content = skype cmd
       res.status = 200
       res.send_response
     elsif @http_request_method == 'GET'
+      puts cmd = "get chat #{@@chat_id} recentchatmessages"
+      ids = skype(cmd).split(/,* /).delete_if{|i|
+        !(i =~ /^\d+$/)
+      }.map{|i|
+        i.to_i
+      }.sort.reverse
+      chats = ids.map{|id|
+        {
+          :id => id,
+          :user => skype("get chatmessage #{id} from_handle").split(/ /).last,
+          :body => skype("get chatmessage #{id} body").split(/ /).last,
+          :time => skype("get chatmessage #{id} timestamp").split(/ /).last.to_i
+        }
+      }
       res.status = 200
-      res.content = ''
+      res.content = chats.to_json
       res.send_response
     end
-
   end
 end
 
