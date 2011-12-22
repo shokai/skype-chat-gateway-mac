@@ -28,7 +28,9 @@ Twitter.configure do |config|
   config.oauth_token_secret = conf['access_secret']
 end
 
-m = Twitter.home_timeline.choice
+m = Twitter.home_timeline.delete_if{|i|
+  i.user.screen_name == Twitter.user.screen_name
+}.choice
 
 puts msg = "<twitter> #{m.text}\nhttp://twitter.com/#{m.user.screen_name}/status/#{m.id}"
 
