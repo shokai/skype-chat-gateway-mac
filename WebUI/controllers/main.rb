@@ -3,9 +3,16 @@ before '*.json' do
   content_type = 'application/json'
 end
 
-get '/' do
+before '/*' do
   @title = @@conf['title']
+end
+
+get '/' do
   haml :index
+end
+
+get '/api' do
+  haml :api
 end
 
 get '/chat.json' do
