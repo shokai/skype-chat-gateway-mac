@@ -43,6 +43,20 @@ get recent chat
 
     % curl -d http://localhost:8787
 
+
+Auto Start
+----------
+
+install plist
+
+    % mkdir ~/Library/LaunchAgents
+    % cp org.shokai.skypegateway.plist ~/Library/LaunchAgents/
+
+edit plist, then
+
+    % launchctl load -w ~/Library/LaunchAgents/org.shokai.skypegateway.plist
+
+
 LICENSE:
 ========
 
