@@ -9,6 +9,7 @@
   %script{:type => 'text/javascript', :src => "#{app_root}/js/main.js"}
 
 %div#chat
+  %a{:href => "#{app_root}/api"} API
   %div#ctrls
     %input{:type => :text, :value => 'おなまえ', :id => 'name'}
     %input{:type => :text, :value => '', :id => 'body', :size => 60}

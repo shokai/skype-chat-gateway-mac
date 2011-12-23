@@ -1,0 +1,21 @@
+- content_for :title do
+  API
+
+- content_for :header_link do
+  %a{:href => app_root}= @title
+
+
+- @api = "#{app_root}/chat.json"
+%div
+  %h2 GET Recent Chats
+  %ul
+    %li HTTP-GET
+    %li
+      %a{:href => @api}= @api
+    %li JSON
+  %h2 POST Chat
+  %ul
+    %li HTTP-POST
+    %li
+      %a{:href => @api}= @api
+    %li curl -d 'name=YOURNAME&body=hello skype' #{@api}

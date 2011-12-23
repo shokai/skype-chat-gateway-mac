@@ -9,6 +9,8 @@
   %body
     %div#content
       %div#header
+        %div#link
+          != yield_content :header_link
         %h1
           != yield_content :title
       %div#main
