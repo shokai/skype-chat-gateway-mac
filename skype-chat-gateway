@@ -28,7 +28,7 @@ class SkypeHttpServer  < EM::Connection
       }.map{|i|
         i.to_i
       }.sort.reverse
-      chats = ids.map{|id|
+      chats = ids[0...40].map{|id|
         {
           :id => id,
           :user => skype("get chatmessage #{id} from_handle").split(/ /).last,
