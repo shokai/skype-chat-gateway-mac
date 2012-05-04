@@ -9,6 +9,9 @@ $font_black : #222;
 }
 
 #ctrls{
+  input#name{
+    width : 100px;
+  }
   input#body{
     width : 480px;
   }
@@ -16,6 +19,7 @@ $font_black : #222;
 
 body {
   @include content;
+  width : 800px;
   background-color : #EEE;
   color : $font_black;
 }
