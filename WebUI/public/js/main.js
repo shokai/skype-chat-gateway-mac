@@ -1,7 +1,8 @@
 var KC = {tab:9, enter:13, left:37, up:38, right:39, down:40};
 
+
 String.prototype.htmlMarkup = function(){
-        return this.replace(/(https?:\/\/[^\s]+)/gi,'<a href="$1">$1</a>')
+    return this.replace(/(https?:\/\/[^\s]+)/gi,'<a href="$1">$1</a>')
 }
 
 
@@ -14,18 +15,19 @@ String.prototype.htmlEscape = function(){
 };
 
 $(function(){
-      $('input#btn_send').click(chat.post);
-      $('input#body').keydown(
-          function(e){
-              if(e.keyCode == KC.enter){
-                  chat.post();
-              }
-          }
-      );
-      chat.get();
-      setInterval(chat.get, chat_interval);
-      var name = $.cookie('name');
-      if(name != null && name.length > 0) $('input#name').val(name);
+    
+    $('input#btn_send').click(chat.post);
+    $('input#body').keydown(
+        function(e){
+            if(e.keyCode == KC.enter){
+                chat.post();
+            }
+        }
+    );
+    chat.get();
+    setInterval(chat.get, chat_interval);
+    var name = $.cookie('name');
+    if(name != null && name.length > 0) $('input#name').val(name);
 });
 
 var chat = {};
