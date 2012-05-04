@@ -8,6 +8,12 @@ $font_black : #222;
   }
 }
 
+#ctrls{
+  input#body{
+    width : 480px;
+  }
+}
+
 body {
   @include content;
   background-color : #EEE;

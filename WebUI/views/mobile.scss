@@ -1,0 +1,39 @@
+
+$font_size : 54pt;
+$font_black : #222;
+
+@mixin box_max {
+  width : 100%;
+}
+
+input {
+  font-size : $font_size;
+}
+
+html, body, div, ul, li, ol {
+  @include box_max;
+}
+
+#ctrls{
+  input#body{
+    width : 100%;
+  }
+}
+
+@mixin content {
+  @include box_max;
+  div {
+    @include box_max;
+    margin : 10px;
+  }
+}
+
+body {
+  font-size : 54pt;
+  padding : 0px;
+  margin : 0px;
+  width : 100%;
+  @include content;
+  background-color : #EEE;
+  color : $font_black;
+}
