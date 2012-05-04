@@ -79,8 +79,13 @@ chatData.merge = function(data){
 chatData.display = function(){
     var tl = $('ul#timeline');
     tl.html('');
-    for(i in this.data){
-        var c = this.data[i];
+    var chats = [];
+    for(var i in this.data){
+        chats.push(this.data[i]);
+    }
+    chats.sort(function(a,b){ return a.time-b.time;});
+    for(i in chats){
+        var c = chats[i];
         var line = (''+c.user+'> '+c.body+' - '+new Date(c.time*1000)).htmlEscape().htmlMarkup();
         var li = $('<li>').html(line);
         tl.prepend(li);
