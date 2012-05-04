@@ -1,5 +1,26 @@
 var KC = {tab:9, enter:13, left:37, up:38, right:39, down:40};
 
+var Notifier = {
+    request : function(){
+        if(window.webkitNotifications.checkPermission() == 1){
+            window.webkitNotifications.requestPermission();
+        }
+    },
+    notify : function(icon, title, body){
+        if(window.webkitNotifications.checkPermission() == 0){
+            var notif = window.webkitNotifications.createNotification(icon, title, body);
+            notif.ondisplay = function(){
+                setTimeout(function(){
+                    if(notif.cancel) notif.cancel();
+                }, 3000);
+            };
+            notif.show();
+        }
+    }
+};
+
+var initialized = false;
+
 
 String.prototype.htmlMarkup = function(){
     return this.replace(/(https?:\/\/[^\s]+)/gi,'<a href="$1">$1</a>')
@@ -15,7 +36,7 @@ String.prototype.htmlEscape = function(){
 };
 
 $(function(){
-    
+    $('body').click(Notifier.request);
     $('input#btn_send').click(chat.post);
     $('input#body').keydown(
         function(e){
@@ -62,6 +83,7 @@ chat.get = function(){
             success : function(data){
                 chatData.merge(data);
                 chatData.display();
+                initialized = true;
             },
             type : 'GET',
             dataType : 'json'
@@ -74,6 +96,7 @@ chatData.data = {};
 chatData.merge = function(data){
     for(i in data){
         var c = data[i];
+        if(initialized && !this.data[c.id]) Notifier.notify("", c.user, c.body);
         this.data[c.id] = c;
     }
 };
