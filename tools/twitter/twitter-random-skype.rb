@@ -32,7 +32,7 @@ m = Twitter.home_timeline.delete_if{|i|
   i.user.screen_name == Twitter.user.screen_name
 }.choice
 
-puts msg = "<#{m.user.screen_name}> #{m.text}\nhttp://twitter.com/#{m.user.screen_name}/status/#{m.id}"
+puts msg = "<@#{m.user.screen_name}> #{m.text}\nhttp://twitter.com/#{m.user.screen_name}/status/#{m.id}"
 
 uri = URI.parse api
 Net::HTTP.start(uri.host, uri.port) do |http|
