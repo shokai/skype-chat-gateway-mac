@@ -6,6 +6,25 @@ require 'eventmachine'
 require 'evma_httpserver'
 require 'json'
 
+class TmpCache
+  def self.cache
+    @@cache ||= Hash.new{|h,k| h = {:expire => 0, :value => nil}}
+  end
+
+  def self.set(key, value, expire=60)
+    cache[key] = {:value => value, :expire => Time.now.to_i+expire}
+    return value
+  end
+
+  def self.get(key)
+    if cache[key][:expire] < Time.now.to_i
+      return cache[key][:value] = nil
+    else
+      return cache[key][:value]
+    end
+  end
+end
+
 def skype(command)
   SkypeMac::Skype.send_(:command => command)
 end
@@ -29,12 +48,14 @@ class SkypeHttpServer  < EM::Connection
         i.to_i
       }.sort.reverse
       chats = ids[0...200].map{|id|
-        {
-          :id => id,
-          :user => skype("get chatmessage #{id} from_handle").split(/ /).last,
-          :body => skype("get chatmessage #{id} body").gsub(/^MESSAGE \d+ BODY /i,''),
-          :time => skype("get chatmessage #{id} timestamp").split(/ /).last.to_i
-        }
+        TmpCache.get(id) ||
+        TmpCache.set(id,
+                     {
+                       :id => id,
+                       :user => skype("get chatmessage #{id} from_handle").split(/ /).last,
+                       :body => skype("get chatmessage #{id} body").gsub(/^MESSAGE \d+ BODY /i,''),
+                       :time => skype("get chatmessage #{id} timestamp").split(/ /).last.to_i
+                     }, 1200)
       }
       res.status = 200
       res.content = chats.to_json
