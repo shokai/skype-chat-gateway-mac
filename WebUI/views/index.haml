@@ -4,7 +4,8 @@
 - content_for :head do
   :javascript
     var app_root = "#{app_root}";
-    var chat_interval = #{@@conf['chat_interval']}
+    var chat_interval = #{@@conf['chat_interval']};
+    var icon_url = "#{app_root}/img/icon.png"
   %script{:type => 'text/javascript', :src => "#{app_root}/js/jquery.cookie.js"}
   %script{:type => 'text/javascript', :src => "#{app_root}/js/main.js"}
 
