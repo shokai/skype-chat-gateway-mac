@@ -1,10 +1,8 @@
 #!/usr/bin/env ruby
 require 'rubygems'
-require 'ArgsParser'
-require 'rb-skypemac'
-require 'eventmachine'
+require 'bundler/setup'
+Bundler.require
 require 'evma_httpserver'
-require 'json'
 
 class TmpCache
   def self.cache

@@ -10,7 +10,8 @@ https://developer.skype.com/public-api-reference-index
 Install Dependencies
 --------------------
 
-    % gem install rb-skypemac ArgsParser eventmachine eventmachine_httpserver json
+    % gem install bundler
+    % bundle install
 
 
 Run
