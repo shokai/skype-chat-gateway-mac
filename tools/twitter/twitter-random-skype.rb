@@ -1,10 +1,8 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'bundler/setup'
-require 'twitter'
-require 'oauth'
+Bundler.require
 require 'yaml'
-require 'json'
 require 'uri'
 require 'net/http'
 

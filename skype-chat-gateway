@@ -1,12 +1,8 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'bundler/setup'
-require 'ArgsParser'
-require 'rb-skypemac'
-require 'eventmachine'
+Bundler.require
 require 'evma_httpserver'
-require 'json'
-require 'tmp_cache'
 
 def skype(command)
   SkypeMac::Skype.send_(:command => command)

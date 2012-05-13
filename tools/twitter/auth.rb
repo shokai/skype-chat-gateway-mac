@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'bundler/setup'
-require 'oauth'
+Bundler.require
 require 'yaml'
 
 conf_file = File.dirname(__FILE__) + '/config.yaml'
