@@ -4,8 +4,10 @@ require 'bundler/setup'
 require 'oauth'
 require 'yaml'
 
+conf_file = File.dirname(__FILE__) + '/config.yaml'
+
 begin
-  conf = YAML::load open(File.dirname(__FILE__) + '/config.yaml')
+  conf = YAML::load open(conf_file)
 rescue
   STDERR.puts 'config.yaml load error'
   exit 1
@@ -26,7 +28,9 @@ oauth_verifier = gets.chomp.strip
 
 access_token = request_token.get_access_token(:oauth_verifier => oauth_verifier)
 
-puts '-'*5
-puts 'access_token : ' + "'#{access_token.token}'"
-puts 'access_secret : ' + "'#{access_token.secret}'"
-puts '-'*5
+conf['access_token'] = access_token.token
+conf['access_secret'] = access_token.secret
+
+open(conf_file, 'w+'){|f|
+  f.write conf.to_yaml
+}

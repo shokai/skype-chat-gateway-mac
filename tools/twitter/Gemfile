@@ -1,5 +1,5 @@
 source :rubygems
 
-gem 'twitter','>=2.0'
-gem 'oauth'
+gem 'twitter', '>=2.0'
+gem 'oauth', '0.4.5'
 gem 'json'
