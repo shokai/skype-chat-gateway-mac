@@ -1,7 +1,11 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'bundler/setup'
-Bundler.require
+require 'rb-skypemac'
+require 'args_parser'
+require 'tmp_cache'
+require 'json'
+require 'eventmachine'
 require 'evma_httpserver'
 
 def skype(command)
