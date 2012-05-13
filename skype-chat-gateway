@@ -43,35 +43,39 @@ class SkypeHttpServer  < EM::Connection
   end
 end
 
-parser = ArgsParser.parser
-parser.comment(:port, 'http port', 8787)
-parser.comment(:chat, 'chat id')
-parser.bind(:help, :h, 'show help')
+parser = ArgsParser.parse ARGV do
+  arg :port, 'http port', :default => 8787
+  arg :chat, 'chat id'
+  arg :help, 'show help', :alias => :h
+end
 
-first, params = parser.parse ARGV
-
-if parser.has_option(:help)
+if parser.has_option? :help
   puts parser.help
-  puts "#{$0} -> get chat list"
-  puts "#{$0} -chat -> "
+  puts "e.g.  #{$0}"
+  puts '  => get chat list'
+  puts "e.g.  #{$0} -chat '#foo/$bar;a1b2cde345'"
+  puts '  => connect chat'
   exit
 end
 
-if !parser.has_param(:chat)
+if !parser.has_param? :chat
   skype('SEARCH RECENTCHATS').split(/,* /).each do |c|
     puts c
   end
+  puts '--'
+  puts "e.g.  #{$0} -help"
+  puts "e.g.  #{$0} -chat '#foo/$bar;a1b2cde345'"
   exit
 end
 
-@@chat_id = params[:chat]
+@@chat_id = parser[:chat]
 puts "chat : #{@@chat_id}"
 
 
 
 EM::run do
-  EM::start_server('0.0.0.0', params[:port].to_i, SkypeHttpServer)
-  puts "start HTTP server - port #{params[:port].to_i}"
+  EM::start_server('0.0.0.0', parser[:port].to_i, SkypeHttpServer)
+  puts "start HTTP server - port #{parser[:port].to_i}"
 end
 
 

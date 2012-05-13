@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'ArgsParser'
+gem 'args_parser'
 gem 'rb-skypemac'
 gem 'eventmachine'
 gem 'eventmachine_httpserver'

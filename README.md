@@ -13,6 +13,9 @@ Install Dependencies
     % gem install bundler
     % bundle install
 
+or
+
+    % bundle update
 
 Run
 ---
