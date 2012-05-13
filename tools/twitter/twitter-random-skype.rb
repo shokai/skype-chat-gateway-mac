@@ -36,5 +36,5 @@ puts msg = "@#{m.user.screen_name} : #{m.text}\nhttp://twitter.com/#{m.user.scre
 
 uri = URI.parse api
 Net::HTTP.start(uri.host, uri.port) do |http|
-  http.post(uri.path, msg)
+  http.post(uri.path.size > 0 ? uri.path : '/', msg)
 end
