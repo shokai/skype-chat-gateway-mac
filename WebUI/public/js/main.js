@@ -96,7 +96,7 @@ chatData.data = {};
 chatData.merge = function(data){
     for(i in data){
         var c = data[i];
-        if(initialized && !this.data[c.id]) Notifier.notify(icon_url, c.user, c.body);
+        if(initialized && this.data[c.id] === null) Notifier.notify(icon_url, c.user, c.body);
         this.data[c.id] = c;
     }
 };
