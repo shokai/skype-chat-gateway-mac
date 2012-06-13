@@ -41,6 +41,7 @@ HTTP Interface
 post message
 
     % curl -d 'hello skype gateway' http://localhost:8787
+    % curl -d 'hello skype gateway' http://localhost:8787/message/user_name
 
 
 get recent chat

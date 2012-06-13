@@ -18,12 +18,19 @@ class SkypeHttpServer  < EM::Connection
   def process_http_request
     res = EM::DelegatedHttpResponse.new(self)
     puts "* http #{@http_request_method} #{@http_path_info} #{@http_query_string} #{@http_post_content}"
-    if @http_request_method == 'POST'
-      puts cmd = "chatmessage #{@@chat_id} #{@http_post_content}"
+    case @http_request_method
+    when 'POST'
+      case @http_path_info
+      when /\/message\/(.+)/
+        to = @http_path_info.scan(/\/message\/(.+)/)[0][0]
+        puts cmd = "message #{to} #{@http_post_content}"
+      else
+        puts cmd = "chatmessage #{@@chat_id} #{@http_post_content}"
+      end
       res.content = skype cmd
       res.status = 200
       res.send_response
-    elsif @http_request_method == 'GET'
+    when 'GET'
       puts cmd = "get chat #{@@chat_id} recentchatmessages"
       ids = skype(cmd).split(/,* /).delete_if{|i|
         !(i =~ /^\d+$/)
@@ -76,11 +83,7 @@ end
 puts "chat : #{@@chat_id}"
 
 
-
 EM::run do
   EM::start_server('0.0.0.0', parser[:port].to_i, SkypeHttpServer)
   puts "start HTTP server - port #{parser[:port].to_i}"
 end
-
-
-
