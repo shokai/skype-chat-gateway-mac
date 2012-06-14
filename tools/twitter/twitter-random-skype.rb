@@ -28,7 +28,7 @@ end
 
 m = Twitter.home_timeline.delete_if{|i|
   i.user.screen_name == Twitter.user.screen_name
-}.choice
+}.sample
 
 puts msg = "@#{m.user.screen_name} : #{m.text}\nhttp://twitter.com/#{m.user.screen_name}/status/#{m.id}"
 
