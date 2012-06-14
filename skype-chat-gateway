@@ -12,6 +12,7 @@ Bootstrap.init :libs
 parser = ArgsParser.parse ARGV do
   arg :list, 'show chat list'
   arg :port, 'http port', :default => 8787
+  arg :conf, 'config file', :default => File.expand_path('config.yml', File.dirname(__FILE__))
   arg :help, 'show help', :alias => :h
 end
 
@@ -22,6 +23,8 @@ if parser.has_option? :help
   exit
 end
 
+Conf.conf_file = parser[:conf]
+
 if parser.has_option? :list
   SkypeGateway::Skype.recent_chats.each do |c|
     puts c
@@ -30,10 +33,13 @@ if parser.has_option? :list
 end
 
 SkypeGateway::HttpServer.chats = Conf['chats']
-Conf['chats'].each do |k,v|
-  puts "- #{k} => #{v}"
+unless Conf['chats'].empty?
+  puts "--chat aliases--"
+  Conf['chats'].each do |k,v|
+    puts "- #{k} => #{v}"
+  end
+  puts "----"
 end
-
 
 EM::run do
   EM::start_server('0.0.0.0', parser[:port].to_i, SkypeGateway::HttpServer)

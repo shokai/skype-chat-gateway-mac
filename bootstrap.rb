@@ -22,7 +22,11 @@ class Conf
   end
 
   def self.conf_file
-    File.dirname(__FILE__)+'/config.yml'
+    @@conf_file
+  end
+
+  def self.conf_file=(path)
+    @@conf_file = path
   end
 
   def self.conf
