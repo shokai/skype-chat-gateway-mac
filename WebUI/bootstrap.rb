@@ -11,10 +11,10 @@ require 'uri'
 require 'net/http'
 
 begin
-  @@conf = YAML::load open(File.dirname(__FILE__)+'/config.yaml').read
+  @@conf = YAML::load open(File.dirname(__FILE__)+'/config.yml').read
   p @@conf
 rescue => e
-  STDERR.puts 'config.yaml load error!'
+  STDERR.puts 'config.yml load error!'
   STDERR.puts e
   exit 1
 end

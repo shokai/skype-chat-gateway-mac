@@ -4,12 +4,12 @@ require 'bundler/setup'
 Bundler.require
 require 'yaml'
 
-conf_file = File.dirname(__FILE__) + '/config.yaml'
+conf_file = File.dirname(__FILE__) + '/config.yml'
 
 begin
   conf = YAML::load open(conf_file)
 rescue
-  STDERR.puts 'config.yaml load error'
+  STDERR.puts 'config.yml load error'
   exit 1
 end
 

@@ -1,15 +1,18 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'bundler/setup'
-Bundler.require
-require 'yaml'
+require 'twitter'
+require 'oauth'
+require 'json'
 require 'uri'
 require 'net/http'
+require 'backports'
 
 begin
-  conf = YAML::load open(File.dirname(__FILE__) + '/config.yaml')
-rescue
-  STDERR.puts 'config.yaml load error'
+  conf = YAML::load open(File.dirname(__FILE__) + '/config.yml')
+rescue => e
+  STDERR.puts e
+  STDERR.puts 'config.yml load error'
   exit 1
 end
 
