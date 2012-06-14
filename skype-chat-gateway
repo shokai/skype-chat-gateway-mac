@@ -1,89 +1,41 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'bundler/setup'
-require 'rb-skypemac'
 require 'args_parser'
 require 'tmp_cache'
 require 'json'
 require 'eventmachine'
 require 'evma_httpserver'
-
-def skype(command)
-  SkypeMac::Skype.send_(:command => command)
-end
-
-class SkypeHttpServer  < EM::Connection
-  include EM::HttpServer
-  
-  def process_http_request
-    res = EM::DelegatedHttpResponse.new(self)
-    puts "* http #{@http_request_method} #{@http_path_info} #{@http_query_string} #{@http_post_content}"
-    case @http_request_method
-    when 'POST'
-      case @http_path_info
-      when /\/message\/(.+)/
-        to = @http_path_info.scan(/\/message\/(.+)/)[0][0]
-        puts cmd = "message #{to} #{@http_post_content}"
-      else
-        puts cmd = "chatmessage #{@@chat_id} #{@http_post_content}"
-      end
-      res.content = skype cmd
-      res.status = 200
-      res.send_response
-    when 'GET'
-      puts cmd = "get chat #{@@chat_id} recentchatmessages"
-      ids = skype(cmd).split(/,* /).delete_if{|i|
-        !(i =~ /^\d+$/)
-      }.map{|i|
-        i.to_i
-      }.sort.reverse
-      chats = ids[0...200].map{|id|
-        TmpCache.get(id) ||
-        TmpCache.set(id,
-                     {
-                       :id => id,
-                       :user => skype("get chatmessage #{id} from_handle").split(/ /).last,
-                       :body => skype("get chatmessage #{id} body").gsub(/^MESSAGE \d+ BODY /i,''),
-                       :time => skype("get chatmessage #{id} timestamp").split(/ /).last.to_i
-                     }, 1200)
-      }
-      res.status = 200
-      res.content = chats.to_json
-      res.send_response
-    end
-  end
-end
+require File.expand_path 'bootstrap', File.dirname(__FILE__)
+Bootstrap.init :libs
 
 parser = ArgsParser.parse ARGV do
+  arg :list, 'show chat list'
   arg :port, 'http port', :default => 8787
-  arg :chat, 'chat id'
   arg :help, 'show help', :alias => :h
 end
 
 if parser.has_option? :help
   puts parser.help
-  puts "e.g.  #{$0}"
-  puts '  => get chat list'
-  puts "e.g.  #{$0} -chat '#foo/$bar;a1b2cde345'"
-  puts '  => connect chat'
-  exit
-end
-
-if !parser.has_param? :chat
-  skype('SEARCH RECENTCHATS').split(/,* /).each do |c|
-    puts c
-  end
-  puts '--'
   puts "e.g.  #{$0} -help"
   puts "e.g.  #{$0} -chat '#foo/$bar;a1b2cde345'"
   exit
 end
 
-@@chat_id = parser[:chat]
-puts "chat : #{@@chat_id}"
+if parser.has_option? :list
+  SkypeGateway::Skype.recent_chats.each do |c|
+    puts c
+  end
+  exit
+end
+
+SkypeGateway::HttpServer.chats = Conf['chats']
+Conf['chats'].each do |k,v|
+  puts "- #{k} => #{v}"
+end
 
 
 EM::run do
-  EM::start_server('0.0.0.0', parser[:port].to_i, SkypeHttpServer)
+  EM::start_server('0.0.0.0', parser[:port].to_i, SkypeGateway::HttpServer)
   puts "start HTTP server - port #{parser[:port].to_i}"
 end
