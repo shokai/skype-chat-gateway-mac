@@ -7,7 +7,7 @@ module SkypeGateway
         @id = id
         @user = Skype.exec("GET CHATMESSAGE #{id} from_handle").split(/ /).last
         @body = Skype.exec("GET CHATMESSAGE #{id} body").gsub(/^MESSAGE \d+ BODY /i,'')
-        @time = Time.at Skype.exec("GET CHATMESSAGE #{id} timestamp").split(/ /).last.to_i
+        @time = Skype.exec("GET CHATMESSAGE #{id} timestamp").split(/ /).last.to_i
       end
 
       def to_hash
