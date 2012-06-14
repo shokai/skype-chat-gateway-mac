@@ -1,0 +1,22 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    args_parser (0.0.2)
+    eventmachine (0.12.10)
+    eventmachine_httpserver (0.2.1)
+    json (1.7.3)
+    rb-appscript (0.6.1)
+    rb-skypemac (0.3.2)
+      rb-appscript (>= 0.3.0)
+    tmp_cache (0.0.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  args_parser (>= 0.0.2)
+  eventmachine
+  eventmachine_httpserver
+  json
+  rb-skypemac (>= 0.3.2)
+  tmp_cache
