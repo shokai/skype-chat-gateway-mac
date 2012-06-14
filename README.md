@@ -6,6 +6,9 @@ Skype API
 ---------
 https://developer.skype.com/public-api-reference-index
 
+* Ruby 1.8.7
+* Mac OSX
+
 
 Install Dependencies
 --------------------
@@ -13,26 +16,12 @@ Install Dependencies
     % gem install bundler
     % bundle install
 
-or
-
-    % bundle update
-
 Run
 ---
 
-show help
-
-    % skype-chat-gateway -h
-
-get chat list
-
-    % skype-chat-gateway
-
-run http server
-
-    % skype-chat-gateway -chat 'chat_id'
-
-!! use SINGLE quotation for chat_id
+    % ruby skype-chat-gateway --help
+    % ruby skype-chat-gateway --list
+    % ruby skype-chat-gateway --port 8787
 
 
 HTTP Interface
@@ -40,13 +29,18 @@ HTTP Interface
 
 post message
 
-    % curl -d 'hello skype gateway' http://localhost:8787
     % curl -d 'hello skype gateway' http://localhost:8787/message/user_name
+    % curl -d 'hello skype gateway' http://localhost:8787/chat/chat_alias
 
 
-get recent chat
+get recent chat messages
 
-    % curl -d http://localhost:8787
+    % curl http://localhost:8787/chat/chat_alias
+
+
+get chat list
+
+    % curl http://localhost:8787/chats
 
 
 Auto Start
