@@ -4,7 +4,7 @@ before '/*.json' do
 end
 
 get '/chat.json' do
-  uri = URI.parse @@conf['gateway']
+  uri = URI.parse Conf['gateway']
   res = nil
   Net::HTTP.start(uri.host, uri.port) do |http|
     res = http.get(uri.path)
@@ -16,7 +16,7 @@ end
 post '/chat.json' do
   @name = params['name']
   @body = params['body']
-  uri = URI.parse @@conf['gateway']
+  uri = URI.parse Conf['gateway']
   res = nil
   Net::HTTP.start(uri.host, uri.port) do |http|
     res = http.post(uri.path, "<#{@name}> #{@body}")

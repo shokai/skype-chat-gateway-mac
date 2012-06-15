@@ -1,6 +1,6 @@
 
 before '/*' do
-  @title = @@conf['title']
+  @title = Conf['title']
 end
 
 get '/' do
