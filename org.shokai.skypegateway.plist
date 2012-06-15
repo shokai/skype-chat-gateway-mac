@@ -6,9 +6,10 @@
   <string>org.shokai.skypegateway.plist</string>
   <key>ProgramArguments</key>
   <array>
+    <string>ruby</string>
     <string>/path/to/skype-chat-gateway</string>
-    <string>-chat</string>
-    <string>your-chat-id</string>
+    <string>--port</string>
+    <string>8787</string>
   </array>
   <key>RunAtLoad</key>
   <true/>
