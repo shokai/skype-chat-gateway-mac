@@ -14,9 +14,15 @@ module SkypeGateway
         res.content = @@chats.to_json
         res.status = 200
       when /^\/message\/(.+)/
-        to = @http_path_info.scan(/\/message\/(.+)/)[0][0]
-        res.content = Skype.send_message to, @http_post_content
-        res.status = 200
+        case @http_request_method
+        when 'POST'
+          to = @http_path_info.scan(/\/message\/(.+)/)[0][0]
+          res.content = Skype.send_message to, @http_post_content
+          res.status = 200
+        else
+          res.content = 'not found'
+          res.status = 404
+        end
       when /^\/chat\/(.+)/
         chat_id = @@chats[@http_path_info.scan(/\/chat\/(.+)/)[0][0]]
         case @http_request_method
@@ -28,6 +34,9 @@ module SkypeGateway
             TmpCache.get(id) || TmpCache.set(id, Skype.message(id), 1200)
           }.to_json
           res.status = 200
+        else
+          res.content = 'not found'
+          res.status = 404
         end
       else
         res.content = 'nof found'
