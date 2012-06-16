@@ -10,6 +10,9 @@ module SkypeGateway
       res = EM::DelegatedHttpResponse.new(self)
       puts "* #{@http_request_method} #{@http_path_info} #{@http_query_string} #{@http_post_content}"
       case @http_path_info
+      when '/'
+        res.content = 'skype-chat-gateway - https://github.com/shokai/skype-chat-gateway-mac'
+        res.status = 200
       when '/chats'
         res.content = @@chats.to_json
         res.status = 200
