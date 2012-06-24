@@ -24,11 +24,11 @@ var initialized = false;
 
 String.prototype.htmlMarkup = function(){
     return this.htmlEscape().split(/(\s+)/).map(function(i){
-        if(i.match(/^s+$/)) return i;
-        if(i.match(/^https?\:\/\/[^\s]+\.(jpe?g|gif|png)$/)){
-            return i.replace(/^(https?\:\/\/[^\s]+)\.(jpe?g|gif|png)$/g, '<img src="$1.$2">');
+        if(i.match(/^\s+$/)) return i;
+        if(i.match(/^\[{0,2}https?\:\/\/[^\s]+\.(jpe?g|gif|png)\]{0,2}$/)){
+            return i.replace(/^\[{0,2}(https?\:\/\/[^\s]+)\.(jpe?g|gif|png)\]{0,2}$/g, '<img src="$1.$2">');
         }
-        return i.replace(/^(https?\:\/\/[^\s]+)$/g, '<a href="$1">$1</a>');
+        return i.replace(/^\[{0,2}(https?\:\/\/[^\s]+)\]{0,2}$/g, '<a href="$1">$1</a>');
     }).join('');
 }
 
