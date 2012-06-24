@@ -6,7 +6,7 @@ Skype API
 ---------
 https://developer.skype.com/public-api-reference-index
 
-* Ruby 1.8.7
+* Ruby 1.8.7 (not works with 1.9.x)
 * Mac OSX
 
 
