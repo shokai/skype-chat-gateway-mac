@@ -23,17 +23,18 @@ var initialized = false;
 
 
 String.prototype.htmlMarkup = function(){
-    return this.htmlEscape().split(/(\s+)/).map(function(i){
+    return this.escape_html().split(/(\s+)/).map(function(i){
         if(i.match(/^\s+$/)) return i;
         if(i.match(/^\[{0,2}https?\:\/\/[^\s]+\.(jpe?g|gif|png)\]{0,2}$/)){
-            return i.replace(/^\[{0,2}(https?\:\/\/[^\s]+)\.(jpe?g|gif|png)\]{0,2}$/g, '<img src="$1.$2">');
+            return i.replace(/^\[{0,2}(https?\:\/\/[^\s]+)\.(jpe?g|gif|png)\]{0,2}$/g,
+                             '<img src="http://content-type.herokuapp.com/type/image/$1.$2">');
         }
         return i.replace(/^\[{0,2}(https?\:\/\/[^\s]+)\]{0,2}$/g, '<a href="$1">$1</a>');
     }).join('');
 }
 
 
-String.prototype.htmlEscape = function(){
+String.prototype.escape_html = function(){
     var span = document.createElement('span');
     var txt =  document.createTextNode('');
     span.appendChild(txt);
