@@ -1,0 +1,16 @@
+{
+  "name": "skype-chat-client",
+  "version": "0.0.1",
+  "main": "skype-chat-client.js",
+  "scripts": {
+    "test": ""
+  },
+  "author": "Sho Hashimoto <hashimoto@shokai.org",
+  "license": "MIT",
+  "description": "Skype Chat Client",
+  "dependencies": {
+    "request": ">=2.9.0",
+    "underscore": ">=1.3.3"
+  },
+  "devDependencies": {}
+}
